@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[Workspace]
+(
+	[Id] BIGINT NOT NULL,	
+
+	CONSTRAINT [PK_Workspace] PRIMARY KEY CLUSTERED ([Id] ASC),
+)
