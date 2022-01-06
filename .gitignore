@@ -1,5 +1,5 @@
 **/appsettings.Local.json
-obj/
+**/obj/
 [Bb]in/
 packages/
 artifacts/
