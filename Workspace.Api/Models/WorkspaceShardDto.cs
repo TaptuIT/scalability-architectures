@@ -1,4 +1,4 @@
-﻿namespace Workspace.Api.Model
+﻿namespace Workspace.Api.Models
 {
     public class WorkspaceShardDto
     {

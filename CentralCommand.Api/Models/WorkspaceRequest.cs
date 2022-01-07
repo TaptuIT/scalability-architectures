@@ -1,4 +1,4 @@
-﻿namespace CentralCommand.Api.Model
+﻿namespace CentralCommand.Api.Models
 {
     public class WorkspaceDto
     {

@@ -1,4 +1,4 @@
-﻿namespace Workspace.Api.Model
+﻿namespace CentralCommand.Api.Models
 {
     public class Region
     {

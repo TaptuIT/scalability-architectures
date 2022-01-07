@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Workspace.Api.Model
+namespace Workspace.Api.Models
 {
     public class WeatherRecord
     {
