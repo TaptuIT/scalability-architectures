@@ -6,20 +6,20 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Threading.Tasks;
 using Workspace.Api.Settings;
-using model = Workspace.Api.Model;
+using Workspace.Api.Models;
 
 namespace Workspace.Api.DataAccess
 {
     public interface IWorkspaceDataAccess
     {
-        model.WorkspaceShardDto Shard { set; get; }
-        Task<IEnumerable<model.WeatherRecord>> GetWeatherforecasts(long workspaceId);
-        Task<model.WeatherRecord> SaveWeatherRecord(model.WeatherRecord weather);
+        WorkspaceShardDto Shard { set; get; }
+        Task<IEnumerable<WeatherRecord>> GetWeatherforecasts(long workspaceId);
+        Task<WeatherRecord> SaveWeatherRecord(WeatherRecord weather);
         Task EnsureWorkspaceInitialized(long workspaceId);
     }
     public class WorkspaceDataAccess: IWorkspaceDataAccess
     {
-        private model.WorkspaceShardDto _shard;
+        private WorkspaceShardDto _shard;
         private readonly ILogger<WorkspaceDataAccess> _logger;
         private readonly DBSettings _dBSettings;
 
@@ -29,9 +29,9 @@ namespace Workspace.Api.DataAccess
             _dBSettings = dBSettings;
         }
 
-        public model.WorkspaceShardDto Shard { get => _shard; set => _shard = value; }
+        public WorkspaceShardDto Shard { get => _shard; set => _shard = value; }
 
-        public async Task<IEnumerable<model.WeatherRecord>> GetWeatherforecasts(long workspaceId)
+        public async Task<IEnumerable<WeatherRecord>> GetWeatherforecasts(long workspaceId)
         {
             if (_shard == null)
             {
@@ -39,7 +39,7 @@ namespace Workspace.Api.DataAccess
                 return null;
             }
 
-            IEnumerable<model.WeatherRecord> result = new List<model.WeatherRecord>();
+            IEnumerable<WeatherRecord> result = new List<WeatherRecord>();
 
             try
             {
@@ -47,7 +47,7 @@ namespace Workspace.Api.DataAccess
                 using (var conn = new SqlConnection(getConnectionString()))
                 {
                     conn.Open();
-                    result = await conn.QueryAsync<model.WeatherRecord>(query, new { workspaceId = workspaceId });
+                    result = await conn.QueryAsync<WeatherRecord>(query, new { workspaceId = workspaceId });
                     conn.Close();
                     return result;
                 }
@@ -59,9 +59,9 @@ namespace Workspace.Api.DataAccess
             }
         }
 
-        public async Task<model.WeatherRecord> SaveWeatherRecord(model.WeatherRecord weather)
+        public async Task<WeatherRecord> SaveWeatherRecord(WeatherRecord weather)
         {
-            model.WeatherRecord result = null;
+            WeatherRecord result = null;
             if (_shard == null)
             {
                 _logger.LogError("Connection string is not set!!");
@@ -75,7 +75,7 @@ namespace Workspace.Api.DataAccess
                 using (var conn = new SqlConnection(getConnectionString()))
                 {
                     conn.Open();
-                    result = await conn.QueryFirstOrDefaultAsync<model.WeatherRecord>(query, weather);
+                    result = await conn.QueryFirstOrDefaultAsync<WeatherRecord>(query, weather);
                     conn.Close();
                     return result;
                 }

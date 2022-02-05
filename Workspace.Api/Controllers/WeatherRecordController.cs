@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Workspace.Api.DataAccess;
-using Workspace.Api.Model;
+using Workspace.Api.Models;
 
 namespace Workspace.Api.Controllers
 {

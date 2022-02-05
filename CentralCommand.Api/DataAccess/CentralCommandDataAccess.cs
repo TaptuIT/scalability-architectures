@@ -1,4 +1,4 @@
-﻿using CentralCommand.Api.Model;
+﻿using CentralCommand.Api.Models;
 using CentralCommand.Api.Settings;
 using Dapper;
 using Microsoft.Extensions.Logging;

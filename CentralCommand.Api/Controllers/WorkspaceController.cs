@@ -1,5 +1,5 @@
 ﻿using CentralCommand.Api.DataAccess;
-using CentralCommand.Api.Model;
+using CentralCommand.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;

@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Workspace.Api.Settings;
-using model = Workspace.Api.Model;
+using Workspace.Api.Models;
 
 namespace Workspace.Api.DataAccess
 {
     public interface ICentralCommandDataAccess
     {
-        Task<IEnumerable<model.Workspace>> GetWorkspacesAsync();
-        Task<model.WorkspaceShardDto> GetShardByWorkspaceIdAsync(long id);
+        Task<IEnumerable<Models.Workspace>> GetWorkspacesAsync();
+        Task<WorkspaceShardDto> GetShardByWorkspaceIdAsync(long id);
     }
 
     public class CentralCommandDataAccess : ICentralCommandDataAccess
@@ -26,9 +26,9 @@ namespace Workspace.Api.DataAccess
             _dBSettings = dBSettings;
         }
 
-        public async Task<IEnumerable<model.Workspace>> GetWorkspacesAsync()
+        public async Task<IEnumerable<Models.Workspace>> GetWorkspacesAsync()
         {
-            IEnumerable<model.Workspace> result = new List<model.Workspace>();
+            IEnumerable<Models.Workspace> result = new List<Models.Workspace>();
 
             try
             {
@@ -36,7 +36,7 @@ namespace Workspace.Api.DataAccess
                 using (var conn = new SqlConnection(_dBSettings.CentralCommandConnectionString))
                 {
                     conn.Open();
-                    result = await conn.QueryAsync<model.Workspace>(query);
+                    result = await conn.QueryAsync<Models.Workspace>(query);
                     conn.Close();
                     return result;
                 }
@@ -48,9 +48,9 @@ namespace Workspace.Api.DataAccess
             }
         }
 
-        public async Task<model.WorkspaceShardDto> GetShardByWorkspaceIdAsync(long workspaceId)
+        public async Task<WorkspaceShardDto> GetShardByWorkspaceIdAsync(long workspaceId)
         {
-            model.WorkspaceShardDto result = null;
+            WorkspaceShardDto result = null;
 
             try
             {
@@ -61,7 +61,7 @@ WHERE w.Id = @workspaceId";
                 using (var conn = new SqlConnection(_dBSettings.CentralCommandConnectionString))
                 {
                     conn.Open();
-                    result = await conn.QueryFirstOrDefaultAsync<model.WorkspaceShardDto>(query, new { workspaceId = workspaceId });
+                    result = await conn.QueryFirstOrDefaultAsync<WorkspaceShardDto>(query, new { workspaceId = workspaceId });
                     conn.Close();
                     return result;
                 }
