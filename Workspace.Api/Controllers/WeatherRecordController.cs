@@ -29,7 +29,7 @@ namespace Workspace.Api.Controllers
         [HttpGet("all")]
         public async Task<ActionResult<IEnumerable<WeatherRecord>>> GetAllForecast([FromRoute] long workspaceId)
         {
-            // VALIDATE request.
+            // VALIDATE request as normal.
             if (workspaceId < 0) return NotFound($"Invalid Workspace Id: {workspaceId}");
 
             // Configure Shard and validate.
@@ -48,7 +48,7 @@ namespace Workspace.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<WeatherRecord>> AddForecast([FromRoute] long workspaceId, [FromBody] WeatherRequest weather)
         {
-            // VALIDATE request
+            // VALIDATE request as normal
             if (weather == null || weather.Summary.Length == 0)
             {
                 _logger.LogError("Empty Dataset.");
@@ -70,27 +70,32 @@ namespace Workspace.Api.Controllers
         }
 
         /// <summary>
-        /// This method replaces Handler service/object.
+        /// This method handles retrieving shard information
+        /// In a production app you would likely have a service or handler responsible for this that injects the shard information into the required location (such as a scoped request context)
         /// </summary>
         private async Task<bool> HandleShard(long workspaceId)
         {
+            //Calculate the URL of this API that is running
             string thisApiUrl = HttpContext.Request.Scheme + "://" + HttpContext.Request.Host.Value;
 
-            // RETRIEVE Shard
+            // RETRIEVE the shard information. You probably should ultimately cache this information as it is likely to be relatively static. 
             _logger.LogInformation($"... Get Shard info for Workspace: {workspaceId}");
             var shard = await _centralCommandDataAccess.GetShardByWorkspaceIdAsync(workspaceId);
             if (shard == null) return false;
 
-            // Validate Region
+            // Validate that the shard is managed by this API. 
+            // We are using the API url here, but you can also use the sql server name to validate this (this is what we do in our app)
             if (thisApiUrl.Equals(shard.ApiUrl, StringComparison.OrdinalIgnoreCase) == false)
             {
                 return false;
             }
 
+            // Send the shard information directly in the data access object.
+            // For a more complicated app you can store this in a context scoped to the curent request. 
             _logger.LogInformation($"... Use Shard info and SAVE data from: {shard.DatabaseName} Database.");
             _workspaceDataAccess.Shard = shard;
 
-            // INIT Shard
+            // Ensure that the required workspace records are present. 
             await _workspaceDataAccess.EnsureWorkspaceInitialized(workspaceId);
             return true;
         }

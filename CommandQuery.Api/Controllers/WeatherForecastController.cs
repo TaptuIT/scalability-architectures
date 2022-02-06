@@ -11,11 +11,11 @@ namespace CommandQuery.Api.Controllers;
 [Route("forecast")]
 public class WeatherForecastController : ControllerBase
 {
-    private static List<string> Summaries = new List<string>
-    {
-        "Ok"
-    };
+    private static string Summary = "Ok";
 
+    /// <summary>
+    /// Static variable to simulate a database access
+    /// </summary>
     private static float Temperature = 0;
 
     private readonly ILogger<WeatherForecastController> _logger;
@@ -27,18 +27,16 @@ public class WeatherForecastController : ControllerBase
 
     [HttpGet]
     [Query]
-    public IEnumerable<WeatherForecast> Get()
+    public WeatherDto Get()
     {
         _logger.LogInformation("Getting Weather Forecast Information.");
         _logger.LogInformation("Temperature around " + Temperature);
-        _logger.LogInformation("Summaries Available: " + Summaries.Count);
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        _logger.LogInformation("Summary: " + Summary);
+        return new WeatherDto
         {
-            Date = DateTime.Now.AddDays(index),
-            TemperatureC = Temperature + Random.Shared.Next(-10, 10),
-            Summary = Summaries[Random.Shared.Next(Summaries.Count)]
-        })
-        .ToArray();
+            Summary = Summary,
+            Temperature = Temperature
+        };
     }
 
     [Command]
@@ -46,10 +44,8 @@ public class WeatherForecastController : ControllerBase
     public IActionResult Set([FromBody] WeatherDto weather)
     {
         _logger.LogInformation("Setting Weather Forecast Information.");
-        if(weather.Summary != null){
-            Summaries.AddRange(weather.Summary);
-        }
-        
+        // Modify details in the static fields here - in production you would be communicating with database
+        Summary = weather.Summary;
         Temperature = weather.Temperature;
         return NoContent();
     }

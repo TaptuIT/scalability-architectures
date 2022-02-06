@@ -11,7 +11,17 @@ namespace Workspace.Api.DataAccess
 {
     public interface ICentralCommandDataAccess
     {
+        /// <summary>
+        /// Retrieves a list of all workspaces
+        /// </summary>
+        /// <returns></returns>
         Task<IEnumerable<Models.Workspace>> GetWorkspacesAsync();
+
+        /// <summary>
+        /// Retrieves shard information for a particular workspace. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<WorkspaceShardDto> GetShardByWorkspaceIdAsync(long id);
     }
 

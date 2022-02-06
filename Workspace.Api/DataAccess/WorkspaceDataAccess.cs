@@ -12,12 +12,33 @@ namespace Workspace.Api.DataAccess
 {
     public interface IWorkspaceDataAccess
     {
+        /// <summary>
+        /// Gets and sets shard infomration used to connect to the database
+        /// </summary>
+        /// <value></value>
         WorkspaceShardDto Shard { set; get; }
+
+        /// <summary>
+        /// Gets weather forecasts for the current shard
+        /// </summary>
+        /// <param name="workspaceId"></param>
+        /// <returns></returns>
         Task<IEnumerable<WeatherRecord>> GetWeatherforecasts(long workspaceId);
+
+        /// <summary>
+        /// Saves a weather forecast to the current shard
+        /// </summary>
+        /// <param name="weather"></param>
+        /// <returns></returns>
         Task<WeatherRecord> SaveWeatherRecord(WeatherRecord weather);
+
+        /// <summary>
+        /// Ensures that a workspace record is created in the appropriate shard. 
+        /// </summary>
+        /// <param name="workspaceId"></param>
         Task EnsureWorkspaceInitialized(long workspaceId);
     }
-    public class WorkspaceDataAccess: IWorkspaceDataAccess
+    public class WorkspaceDataAccess : IWorkspaceDataAccess
     {
         private WorkspaceShardDto _shard;
         private readonly ILogger<WorkspaceDataAccess> _logger;
@@ -117,7 +138,10 @@ END;";
             }
         }
 
-
+        /// <summary>
+        /// Builds a conection string based on the current shard information
+        /// </summary>
+        /// <returns>connection staring as a string</returns>
         private string getConnectionString()
             => new StringBuilder()
                     .Append("Server=")
