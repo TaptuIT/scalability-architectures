@@ -11,7 +11,7 @@ PrimaryApiUrlBase is the Url that the middleware will redirect to if it recieves
 
 # Running the demo
 
-This demonstrates an implementation fo the command query pattern for an API. This pattern is intended to work across different physical locations, but you can simulate this locally by running it on different ports and changing the appsetting configuration between boots. Settign IsPrimaryApi to false before running an intance of the API will run it as a query only API. 
+This demonstrates an implementation fo the command query pattern for an API. This pattern is intended to work across different physical locations, but you can simulate this locally by running it on different ports and changing the appsetting configuration between boots. Setting IsPrimaryApi to false before running an intance of the API will run it as a query only API. 
 
 e.g.
 dotnet run --urls https://localhost:5001;http://localhost:5000

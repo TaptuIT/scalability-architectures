@@ -109,7 +109,7 @@ namespace CommandQuery.Api.Middleware
         /// </summary>
         private async Task<HttpResponseMessage> ForwardToCommand(HttpContext context, HttpRequestMessage requestMessage)
         {
-            // We probably won't need to handle cookies for now but add the container in case we need the functionality later...
+            // In case you need to handle cookies, currently we do not need to use this. 
             var cookies = new CookieContainer();
 
             // Make a client handler and do not allow it to follow redirects (these should be passed back through)
@@ -144,6 +144,11 @@ namespace CommandQuery.Api.Middleware
             return responseMessage;
         }
 
+        /// <summary>
+        /// Helper function to combine url segments
+        /// </summary>
+        /// <param name="urlSegments"></param>
+        /// <returns></returns>
         private static string CombineAsUrl(params string[] urlSegments)
         {
             var url = "";

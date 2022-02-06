@@ -27,15 +27,16 @@ public class WeatherForecastController : ControllerBase
 
     [HttpGet]
     [Query]
-    public WeatherDto Get()
+    public WeatherForecast Get()
     {
         _logger.LogInformation("Getting Weather Forecast Information.");
         _logger.LogInformation("Temperature around " + Temperature);
         _logger.LogInformation("Summary: " + Summary);
-        return new WeatherDto
+        return new WeatherForecast
         {
             Summary = Summary,
-            Temperature = Temperature
+            TemperatureC = Temperature,
+            Date = DateTime.Now
         };
     }
 
